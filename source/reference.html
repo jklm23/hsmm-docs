@@ -1,0 +1,730 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API reference &mdash; hsmmlearn 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> hsmmlearn
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hsmm-module"><code class="docutils literal notranslate"><span class="pre">hsmm</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-hsmmlearn.emissions"><code class="docutils literal notranslate"><span class="pre">emissions</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#properties-module"><code class="docutils literal notranslate"><span class="pre">properties</span></code> module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">hsmmlearn</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>API reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/reference.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-reference">
+<h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hsmm-module">
+<h2><code class="docutils literal notranslate"><span class="pre">hsmm</span></code> module<a class="headerlink" href="#hsmm-module" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="hsmmlearn.hsmm.HSMMModel">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.hsmm.</code><code class="sig-name descname">HSMMModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">emissions</span></em>, <em class="sig-param"><span class="n">durations</span></em>, <em class="sig-param"><span class="n">tmat</span></em>, <em class="sig-param"><span class="n">startprob</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">support_cutoff</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>HSMM model base class.</p>
+<p>This class provides the basic functionality to work with hidden semi-Markov
+models:</p>
+<ol class="arabic simple">
+<li><p>Sampling from a HSMM via the <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.sample" title="hsmmlearn.hsmm.HSMMModel.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a> method;</p></li>
+<li><p>Fitting the parameters of a HSMM to a sequence of observations via the
+<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a> method.</p></li>
+</ol>
+<p>These methods are agnostic as to what HSMM is being used: the specifics of
+the model are all encapsulated in the properties <cite>tmat</cite>, <cite>emissions</cite>, and
+<cite>durations</cite>, which control the transition matrix, the emission
+distribution, and the duration distribution. In particular, the emission
+distribution can be discrete or continuous.</p>
+<dl class="py method">
+<dt id="hsmmlearn.hsmm.HSMMModel.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">emissions</span></em>, <em class="sig-param"><span class="n">durations</span></em>, <em class="sig-param"><span class="n">tmat</span></em>, <em class="sig-param"><span class="n">startprob</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">support_cutoff</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new HSMM instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emissions</strong> (<a class="reference internal" href="#hsmmlearn.emissions.AbstractEmissions" title="hsmmlearn.emissions.AbstractEmissions"><em>hsmmlearn.emissions.AbstractEmissions</em></a>) – Emissions distribution to use.</p></li>
+<li><p><strong>durations</strong> (<em>numpy.ndarray</em><em> or </em><em>list of random variables.</em>) – Durations matrix with shape (n_states, n_durations). If a list of
+random variables is passed in, all RVs must be subclasses of
+<code class="docutils literal notranslate"><span class="pre">scipy.stats.rv_discrete</span></code>. In this case, the duration
+probabilities are obtained from the support of the RVs, from
+1 to <cite>support_cutoff</cite>.</p></li>
+<li><p><strong>tmat</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_states</em><em>, </em><em>n_states</em><em>)</em>) – Transition matrix.</p></li>
+<li><p><strong>startprob</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_states</em><em>, </em><em>)</em>) – Initial probabilities for the Markov chain. If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+the uniform distribution is assumed (all states are equally
+likely).</p></li>
+<li><p><strong>support_cutoff</strong> (<em>int</em>) – Maximal duration to take into account. This is used when passing in
+a list of random variables for the durations, which will then be
+sampled from 1 to <code class="docutils literal notranslate"><span class="pre">support_cutoff</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.hsmm.HSMMModel.decode">
+<code class="sig-name descname">decode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find most likely internal states for a sequence of observations.</p>
+<p>Given a sequence of observations, this method runs the Viterbi
+algorithm to find the most likely sequence of corresponding internal
+states. “Most likely” should be interpreted here (as in the classical
+Viterbi algorithm) as the sequence of states that maximizes the joint
+probability P(observations, states).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Observations.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>states</strong> – Reconstructed internal states.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, shape=(n_obs, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="hsmmlearn.hsmm.HSMMModel.durations">
+<code class="sig-name descname">durations</code><em class="property"> = None</em><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.durations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duration distribution matrix data descriptor. Each row corresponds to
+a hidden state, with the <cite>i</cite>-th entry the probability of seeing duration
+<cite>i</cite> in that state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="hsmmlearn.hsmm.HSMMModel.emissions">
+<code class="sig-name descname">emissions</code><em class="property"> = None</em><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.emissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emission distribution data descriptor. Valid assignments to this
+descriptor must be a subclass of
+<a class="reference internal" href="#hsmmlearn.emissions.AbstractEmissions" title="hsmmlearn.emissions.AbstractEmissions"><code class="xref py py-class docutils literal notranslate"><span class="pre">hsmmlearn.emissions.AbstractEmissions</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.hsmm.HSMMModel.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">atol</span><span class="o">=</span><span class="default_value">1e-05</span></em>, <em class="sig-param"><span class="n">censoring</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the parameters of a HSMM to a given sequence of observations.</p>
+<p>This method runs the expectation-maximization algorithm to adjust the
+parameters of the HSMM to fit a given sequence of observations as well
+as possible. The HSMM will be updated in place, unless an error occurs,
+in which case the original HSMM is restored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_samples</em><em>, </em><em>)</em>) – Sequence of observations.</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em>) – Maximum number of EM steps to do before terminating.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance to decide whether the EM algorithm has
+converged.</p></li>
+<li><p><strong>censoring</strong> (<em>bool</em>) – Whether to apply right-censoring.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NoConvergenceError</strong> – If the algorithm terminated abnormally before converging.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.hsmm.HSMMModel.n_durations">
+<em class="property">property </em><code class="sig-name descname">n_durations</code><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.n_durations" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of durations for this HSMM.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.hsmm.HSMMModel.n_states">
+<em class="property">property </em><code class="sig-name descname">n_states</code><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.n_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of hidden states for this HSMM.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.hsmm.HSMMModel.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_samples</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random sample from the HSMM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<em>int</em>) – Number of samples to generate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>observations, states</strong> – Random sample of observations and internal states.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, shape=(n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="hsmmlearn.hsmm.HSMMModel.tmat">
+<code class="sig-name descname">tmat</code><em class="property"> = None</em><a class="headerlink" href="#hsmmlearn.hsmm.HSMMModel.tmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data descriptor for the transition matrix.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-hsmmlearn.emissions">
+<span id="emissions-module"></span><h2><code class="docutils literal notranslate"><span class="pre">emissions</span></code> module<a class="headerlink" href="#module-hsmmlearn.emissions" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="hsmmlearn.emissions.AbstractEmissions">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.emissions.</code><code class="sig-name descname">AbstractEmissions</code><a class="headerlink" href="#hsmmlearn.emissions.AbstractEmissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for emissions distributions.</p>
+<p>To create a HSMM with a custom emission distribution, write a derived
+class that implements some (or all) of the abstract methods. If you
+don’t need all of the HSMM functionality, you can get by with implementing
+only some of the methods.</p>
+<dl class="py method">
+<dt id="hsmmlearn.emissions.AbstractEmissions.copy">
+<em class="property">abstract </em><code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.AbstractEmissions.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of this object.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a> to
+make a copy of the emissions object before modifying it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.AbstractEmissions.likelihood">
+<em class="property">abstract </em><code class="sig-name descname">likelihood</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.AbstractEmissions.likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the likelihood of a sequence of observations.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a> and
+<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.decode" title="hsmmlearn.hsmm.HSMMModel.decode"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.decode()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Sequence of observations.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>likelihood</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.AbstractEmissions.reestimate">
+<em class="property">abstract </em><code class="sig-name descname">reestimate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.AbstractEmissions.reestimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the distribution parameters given sequences of
+smoothed probabilities and observations.</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is an array of smoothed probabilities,
+with the entry <code class="docutils literal notranslate"><span class="pre">gamma[s,</span> <span class="pre">i]</span></code> giving the probability of
+finding the system in state <code class="docutils literal notranslate"><span class="pre">s</span></code> given <em>all</em> of the observations
+up to index <code class="docutils literal notranslate"><span class="pre">i</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{s, i} = P(s | o_1, \ldots, o_i ).\]</div>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Smoothed probabilities.</p></li>
+<li><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Observations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.AbstractEmissions.sample_for_state">
+<em class="property">abstract </em><code class="sig-name descname">sample_for_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.AbstractEmissions.sample_for_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a random emission given a state.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.sample" title="hsmmlearn.hsmm.HSMMModel.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.sample()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>int</em>) – The internal state.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The number of random samples to generate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>observations</strong> – Random emissions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, shape=(size, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hsmmlearn.emissions.GaussianEmissions">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.emissions.</code><code class="sig-name descname">GaussianEmissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">means</span></em>, <em class="sig-param"><span class="n">scales</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.GaussianEmissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>An emissions class for Gaussian emissions.</p>
+<p>This emissions class models the case where emissions are real-valued
+and continuous, and the probability of observing an emission given
+the state is modeled by a Gaussian. The means and standard deviations
+for each Gaussian (one for each state) are stored as state on the
+class.</p>
+<dl class="py method">
+<dt id="hsmmlearn.emissions.GaussianEmissions.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.GaussianEmissions.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of this object.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a> to
+make a copy of the emissions object before modifying it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="hsmmlearn.emissions.GaussianEmissions.dtype">
+<code class="sig-name descname">dtype</code><a class="headerlink" href="#hsmmlearn.emissions.GaussianEmissions.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.float64</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.GaussianEmissions.likelihood">
+<code class="sig-name descname">likelihood</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.GaussianEmissions.likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the likelihood of a sequence of observations.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a> and
+<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.decode" title="hsmmlearn.hsmm.HSMMModel.decode"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.decode()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Sequence of observations.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>likelihood</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.GaussianEmissions.reestimate">
+<code class="sig-name descname">reestimate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">observations</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.GaussianEmissions.reestimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the distribution parameters given sequences of
+smoothed probabilities and observations.</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is an array of smoothed probabilities,
+with the entry <code class="docutils literal notranslate"><span class="pre">gamma[s,</span> <span class="pre">i]</span></code> giving the probability of
+finding the system in state <code class="docutils literal notranslate"><span class="pre">s</span></code> given <em>all</em> of the observations
+up to index <code class="docutils literal notranslate"><span class="pre">i</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{s, i} = P(s | o_1, \ldots, o_i ).\]</div>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Smoothed probabilities.</p></li>
+<li><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Observations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.GaussianEmissions.sample_for_state">
+<code class="sig-name descname">sample_for_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.GaussianEmissions.sample_for_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a random emission given a state.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.sample" title="hsmmlearn.hsmm.HSMMModel.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.sample()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>int</em>) – The internal state.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The number of random samples to generate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>observations</strong> – Random emissions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, shape=(size, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hsmmlearn.emissions.MultinomialEmissions">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.emissions.</code><code class="sig-name descname">MultinomialEmissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">probabilities</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.MultinomialEmissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>An emissions class for multinomial emissions.</p>
+<p>This emissions class models the case where the emissions are categorical
+variables, assuming values from 0 to some value k, and the probability
+of observing an emission given a state is modeled by a multinomial
+distribution.</p>
+<dl class="py method">
+<dt id="hsmmlearn.emissions.MultinomialEmissions.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.MultinomialEmissions.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of this object.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a> to
+make a copy of the emissions object before modifying it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="hsmmlearn.emissions.MultinomialEmissions.dtype">
+<code class="sig-name descname">dtype</code><a class="headerlink" href="#hsmmlearn.emissions.MultinomialEmissions.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.int64</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.MultinomialEmissions.likelihood">
+<code class="sig-name descname">likelihood</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.MultinomialEmissions.likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the likelihood of a sequence of observations.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a> and
+<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.decode" title="hsmmlearn.hsmm.HSMMModel.decode"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.decode()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Sequence of observations.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>likelihood</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.MultinomialEmissions.reestimate">
+<code class="sig-name descname">reestimate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">observations</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.MultinomialEmissions.reestimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the distribution parameters given sequences of
+smoothed probabilities and observations.</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is an array of smoothed probabilities,
+with the entry <code class="docutils literal notranslate"><span class="pre">gamma[s,</span> <span class="pre">i]</span></code> giving the probability of
+finding the system in state <code class="docutils literal notranslate"><span class="pre">s</span></code> given <em>all</em> of the observations
+up to index <code class="docutils literal notranslate"><span class="pre">i</span></code>:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{s, i} = P(s | o_1, \ldots, o_i ).\]</div>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.fit" title="hsmmlearn.hsmm.HSMMModel.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.fit()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Smoothed probabilities.</p></li>
+<li><p><strong>obs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_obs</em><em>, </em><em>)</em>) – Observations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.emissions.MultinomialEmissions.sample_for_state">
+<code class="sig-name descname">sample_for_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.emissions.MultinomialEmissions.sample_for_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a random emission given a state.</p>
+<p>This method is called by <a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel.sample" title="hsmmlearn.hsmm.HSMMModel.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel.sample()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>int</em>) – The internal state.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The number of random samples to generate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>observations</strong> – Random emissions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, shape=(size, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="properties-module">
+<h2><code class="docutils literal notranslate"><span class="pre">properties</span></code> module<a class="headerlink" href="#properties-module" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="hsmmlearn.properties.Durations">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.properties.</code><code class="sig-name descname">Durations</code><a class="headerlink" href="#hsmmlearn.properties.Durations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data descriptor for a durations distribution.</p>
+<dl class="py method">
+<dt id="hsmmlearn.properties.Durations.__get__">
+<code class="sig-name descname">__get__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.properties.Durations.__get__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the durations distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>durations</strong> – Durations matrix.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray, shape=(n_states, n_durations)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.properties.Durations.__set__">
+<code class="sig-name descname">__set__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">durations</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.properties.Durations.__set__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the durations distribution with new durations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel" title="hsmmlearn.hsmm.HSMMModel"><em>hsmmlearn.hsmm.HSMMModel</em></a>) – The underlying HSMMModel.</p></li>
+<li><p><strong>durations</strong> (<em>numpy.ndarray</em><em> or </em><em>list of random variables.</em>) – This can be either a numpy array, in which case the number of
+rows must be equal to the number of hidden states, or a list
+of scipy.stats discrete random variables. In the latter case,
+the duration probabilities are obtained directly from the random
+variables.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hsmmlearn.properties.Emissions">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.properties.</code><code class="sig-name descname">Emissions</code><a class="headerlink" href="#hsmmlearn.properties.Emissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data descriptor for an emissions distribution.</p>
+<dl class="py method">
+<dt id="hsmmlearn.properties.Emissions.__get__">
+<code class="sig-name descname">__get__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.properties.Emissions.__get__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the emissions distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>emissions</strong> – The emissions distribution.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#hsmmlearn.emissions.AbstractEmissions" title="hsmmlearn.emissions.AbstractEmissions">hsmmlearn.emissions.AbstractEmissions</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.properties.Emissions.__set__">
+<code class="sig-name descname">__set__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">emissions</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.properties.Emissions.__set__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the emissions distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel" title="hsmmlearn.hsmm.HSMMModel"><em>hsmmlearn.hsmm.HSMMModel</em></a>) – The underlying HSMMModel.</p></li>
+<li><p><strong>emissions</strong> (<a class="reference internal" href="#hsmmlearn.emissions.AbstractEmissions" title="hsmmlearn.emissions.AbstractEmissions"><em>hsmmlearn.emissions.AbstractEmissions</em></a>) – The emissions distribution.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hsmmlearn.properties.TransitionMatrix">
+<em class="property">class </em><code class="sig-prename descclassname">hsmmlearn.properties.</code><code class="sig-name descname">TransitionMatrix</code><a class="headerlink" href="#hsmmlearn.properties.TransitionMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data descriptor for a transitions matrix.</p>
+<dl class="py method">
+<dt id="hsmmlearn.properties.TransitionMatrix.__get__">
+<code class="sig-name descname">__get__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.properties.TransitionMatrix.__get__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the transition matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>tmat</strong> – A transition matrix.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray, shape=(n_states, n_states)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hsmmlearn.properties.TransitionMatrix.__set__">
+<code class="sig-name descname">__set__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hsmmlearn.properties.TransitionMatrix.__set__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new transition matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<a class="reference internal" href="#hsmmlearn.hsmm.HSMMModel" title="hsmmlearn.hsmm.HSMMModel"><em>hsmmlearn.hsmm.HSMMModel</em></a>) – The underlying HSMMModel.</p></li>
+<li><p><strong>value</strong> (<em>numpy.ndarray</em><em>, </em><em>shape=</em><em>(</em><em>n_states</em><em>, </em><em>n_states</em><em>)</em>) – The new transition matrix. This must be a square matrix. If
+a transition matrix was previously assigned to the HSMM,
+the new transition matrix must have the same number of rows.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2016, Joris Vankerschaver
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

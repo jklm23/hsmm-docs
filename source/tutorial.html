@@ -1,0 +1,569 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tutorial &mdash; hsmmlearn 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="reference.html" />
+    <link rel="prev" title="Welcome to the documentation for hsmmlearn!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> hsmmlearn
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#decoding">Decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aside-different-emission-pdfs">Aside: different emission PDFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-inference">Model inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">hsmmlearn</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we’ll explore the two main pieces of functionality that
+<code class="docutils literal notranslate"><span class="pre">HSMMLearn</span></code> provides:</p>
+<ul class="simple">
+<li><p>Viterbi decoding: given a sequence of observations, find the sequence
+of hidden states that maximizes the joint probability of the
+observations and the states.</p></li>
+<li><p>Baum-Welch model inference: given a sequence of observations, find
+the model parameters (the transition and emission matrices, and the
+duration distributions) that maximize the probability of the
+observations given the model.</p></li>
+</ul>
+<p>In case you are reading this as part of the Sphinx documentation, there
+is an IPython 4 notebook with the contents of this tutorial in the
+<code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> folder at the root of the repository.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="section" id="decoding">
+<h2>Decoding<a class="headerlink" href="#decoding" title="Permalink to this headline">¶</a></h2>
+<p>For this part of the tutorial we’ll use an HSMM with 3 internal states
+and 4 durations 1, …, 4. We’ll stick to using Gaussian emissions
+throughout (i.e. the probability density of the observations given the
+state is a 1D Gaussian with a fixed mean and standard deviation), but
+discrete observations (or observations modeled on another class of PDF)
+can be slotted in equally easily.</p>
+<p>The transition matrix is chosen so that there are no self-transitions
+(all the diagonal elements are 0). This forces the system to go to a
+different state at the end of each duration. This is not strictly
+necessary, but allows us to visualize the effect of the different
+durations a little better.</p>
+<p>The duration matrix is chosen so that for state 1, there is a 90% chance
+of having the duration equal to 4, and 10% duration 1. For state 2 and
+3, there is a 90% probability of having duration 3, resp. 2. As the
+duration lengths don’t differ much, this won’t be very visible, but for
+sparse duration distributions with many durations it does make a
+difference.</p>
+<p>For the emission PDFs, we choose clearly separated Gaussians, with means
+0, 5, and 10, and standard deviation equal to 1 in each case.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hsmmlearn.hsmm</span> <span class="kn">import</span> <span class="n">GaussianHSMM</span>
+
+<span class="n">durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">tmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
+<span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">means</span><span class="p">)</span>
+
+<span class="n">hsmm</span> <span class="o">=</span> <span class="n">GaussianHSMM</span><span class="p">(</span>
+    <span class="n">means</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="n">durations</span><span class="p">,</span> <span class="n">tmat</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Having initialized the Gaussian HSMM, let’s sample from it to obtain a
+sequence of internal states and observations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">hsmm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">states</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">2</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">observations</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">10.52314041</span>   <span class="mf">9.86235128</span>   <span class="mf">4.07406132</span>   <span class="mf">5.44132853</span>   <span class="mf">5.76402099</span>
+  <span class="mf">11.43504019</span>  <span class="mf">10.13734856</span>  <span class="o">-</span><span class="mf">0.93207824</span>   <span class="mf">0.75532059</span>  <span class="o">-</span><span class="mf">1.29944693</span>
+  <span class="o">-</span><span class="mf">0.47906227</span>   <span class="mf">9.9658948</span>   <span class="mf">10.36830046</span>   <span class="mf">3.4782257</span>    <span class="mf">4.58492773</span>
+   <span class="mf">5.10710389</span>   <span class="mf">8.49856484</span>  <span class="mf">11.92186325</span>   <span class="mf">5.41462254</span>   <span class="mf">3.9717193</span> <span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">states</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x1131efdd0</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<img alt="../_images/tutorial_10_1.png" src="../_images/tutorial_10_1.png" />
+<p>In the figure, the red line is the mean of the PDF that was selected for
+that internal state, and the blue line shows the observations. As is
+expected, the observations are clustered around the mean for each state.</p>
+<p>Assuming now that we only have the observations, and we want to
+reconstruct, or decode, the most likely internal states for those
+observations. This can be done by means of the classical Viterbi
+algorithm, which has an extension for HSMMs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">decoded_states</span> <span class="o">=</span> <span class="n">hsmm</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Given that our Gaussian peaks are so clearly separated, the Viterbi
+decoder manages to reconstruct the entire state sequence correctly. No
+surprise, and not very exciting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">states</span> <span class="o">!=</span> <span class="n">decoded_states</span><span class="p">)</span>  <span class="c1"># Number of differences between the original and the decoded states</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>Things become a little more interesting when the peaks are not so well
+separated. In the example below, we move the mean of the second Gaussian
+up to 8.0 (up from 5.0), and then we sample and decode again. We also
+set the duration distribution to something a little more uniform, just
+to make things harder on the decoder (it turns out that otherwise the
+decoder is able to infer the internal state sequence almost completely
+on the basis of the inferred durations alone).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
+
+<span class="n">hsmm</span><span class="o">.</span><span class="n">durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="n">hsmm</span><span class="o">.</span><span class="n">means</span> <span class="o">=</span> <span class="n">new_means</span>
+
+<span class="n">observations</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">hsmm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">decoded_states</span> <span class="o">=</span> <span class="n">hsmm</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">states</span> <span class="o">!=</span> <span class="n">decoded_states</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">10</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_means</span><span class="p">[</span><span class="n">states</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_means</span><span class="p">[</span><span class="n">decoded_states</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x113d12d90</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<img alt="../_images/tutorial_18_1.png" src="../_images/tutorial_18_1.png" />
+<p>In the figure, the red line again shows the mean of the original
+sequence of internal states, while the gray line (offset by 0.5 to avoid
+overlapping with the rest of the plot) shows the reconstructed sequence.
+They track each other pretty faithfully, except in areas where the
+observations give not much information about the internal state.</p>
+</div>
+<div class="section" id="aside-different-emission-pdfs">
+<h2>Aside: different emission PDFs<a class="headerlink" href="#aside-different-emission-pdfs" title="Permalink to this headline">¶</a></h2>
+<p>In the previous example, we worked throughout with an instance of the
+class <code class="docutils literal notranslate"><span class="pre">GaussianHSMM</span></code>. This is a convenience wrapper around a more
+general class <code class="docutils literal notranslate"><span class="pre">hsmmlearn.hsmm.HSMMModel</span></code>, which allows for more
+general emission PDFs via Python descriptors. To see how this works,
+let’s first re-instantiate our Gaussian HSMM via <code class="docutils literal notranslate"><span class="pre">HSMMModel</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hsmmlearn.hsmm</span> <span class="kn">import</span> <span class="n">HSMMModel</span>
+<span class="kn">from</span> <span class="nn">hsmmlearn.emissions</span> <span class="kn">import</span> <span class="n">GaussianEmissions</span>
+
+<span class="n">gaussian_hsmm</span> <span class="o">=</span> <span class="n">HSMMModel</span><span class="p">(</span>
+    <span class="n">GaussianEmissions</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">scales</span><span class="p">),</span> <span class="n">durations</span><span class="p">,</span> <span class="n">tmat</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This class can be used in much the same way as the more practical
+<code class="docutils literal notranslate"><span class="pre">GaussianHSMM</span></code>. However, it lacks some convenience attributes
+(<code class="docutils literal notranslate"><span class="pre">.means</span></code>, <code class="docutils literal notranslate"><span class="pre">.scales</span></code>, …) that <code class="docutils literal notranslate"><span class="pre">GaussianHSMM</span></code> does have.</p>
+<p>To create an HSMM with a different class of emission PDFs, it suffices
+to derive from <code class="docutils literal notranslate"><span class="pre">hsmmlearn.emissions.AbstractEmissions</span></code> and supply the
+required functionality there. This is an abstract base class with a
+couple of abstract methods that need to be overridden in the concrete
+class. If you require only some of the functionality, you can override
+the methods that you don’t need with an empty function. To see this in
+practice, let’s create an HSMM with Laplace emission PDFs. Below, we
+override <code class="docutils literal notranslate"><span class="pre">sample_for_state</span></code> because we want to sample from the HSMM,
+and <code class="docutils literal notranslate"><span class="pre">likelihood</span></code>, needed to run Viterbi (not demonstrated).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">laplace</span>
+
+<span class="kn">from</span> <span class="nn">hsmmlearn.emissions</span> <span class="kn">import</span> <span class="n">AbstractEmissions</span>
+
+<span class="c1"># Note: this is almost identical to the GaussianEmissions class,</span>
+<span class="c1"># the only difference being that we replaced the Gaussian RV (norm)</span>
+<span class="c1"># with a Laplacian RV (laplace).</span>
+<span class="k">class</span> <span class="nc">LaplaceEmissions</span><span class="p">(</span><span class="n">AbstractEmissions</span><span class="p">):</span>
+
+    <span class="c1"># Note: this property is a hack, and will become unnecessary soon!</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">scales</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">means</span> <span class="o">=</span> <span class="n">means</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scales</span> <span class="o">=</span> <span class="n">scales</span>
+
+    <span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="c1"># TODO: build in some check for the shape of the likelihoods, otherwise</span>
+        <span class="c1"># this will silently fail and give the wrong results.</span>
+        <span class="k">return</span> <span class="n">laplace</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span>
+                           <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+                           <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">sample_for_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">laplace</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">[</span><span class="n">state</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">[</span><span class="n">state</span><span class="p">],</span> <span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">laplace_hsmm</span> <span class="o">=</span> <span class="n">HSMMModel</span><span class="p">(</span>
+    <span class="n">LaplaceEmissions</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">scales</span><span class="p">),</span> <span class="n">durations</span><span class="p">,</span> <span class="n">tmat</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">laplace_hsmm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s check that this defines indeed an HSMM with Laplacian output PDFs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state0_mask</span> <span class="o">=</span> <span class="n">states</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="n">observations_state0</span> <span class="o">=</span> <span class="n">observations</span><span class="p">[</span><span class="n">state0_mask</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">observations_state0</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/tutorial_27_0.png" src="../_images/tutorial_27_0.png" />
+<p>Looks indeed like a Laplacian distribution!</p>
+</div>
+<div class="section" id="model-inference">
+<h2>Model inference<a class="headerlink" href="#model-inference" title="Permalink to this headline">¶</a></h2>
+<p>In the next section, we’ll tackle the “third question” outlined by
+Rabiner: given a sequence of observed data, what is the “most likely”
+model that could have given rise to these observations? To achieve this,
+we’ll employ an iterative procedure known as the expectation
+maximization algorithm, which adjusts the transition/emission/duration
+data to generate the optimal model.</p>
+<p>We start by sampling from a Gaussian HSMM that has three states, with
+very clearly separated durations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hsmmlearn.hsmm</span> <span class="kn">import</span> <span class="n">GaussianHSMM</span>
+
+<span class="n">durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="c1"># XXXX</span>
+<span class="n">durations</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">durations</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">durations</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">durations</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.55</span>
+
+<span class="n">tmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
+<span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">means</span><span class="p">)</span>
+
+<span class="n">hsmm</span> <span class="o">=</span> <span class="n">GaussianHSMM</span><span class="p">(</span>
+    <span class="n">means</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="n">durations</span><span class="p">,</span> <span class="n">tmat</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hsmm</span><span class="o">.</span><span class="n">durations</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.55</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>
+         <span class="mf">0.05</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.55</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>
+         <span class="mf">0.05</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.05</span><span class="p">,</span>
+         <span class="mf">0.55</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">hsmm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">states</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x113f3bf10</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<img alt="../_images/tutorial_33_1.png" src="../_images/tutorial_33_1.png" />
+<p>The plot shows clearly that the durations are separated: state 0, with
+mean 0.0, has very short durations, while states 1 and 2 have much
+longer durations.</p>
+<p>Having sampled from the HSMM, we’ll now forget our duration distribution
+and set up a new HSMM with a flat duration distribution.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">equal_prob_durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">new_hsmm</span> <span class="o">=</span> <span class="n">GaussianHSMM</span><span class="p">(</span>
+    <span class="n">means</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="n">equal_prob_durations</span><span class="p">,</span> <span class="n">tmat</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">equal_prob_durations</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">.fit</span></code> method, we’ll run the expectation-maximization
+algorithm on our new duration-agnostic HSMM. This will adjust the
+parameters of the HSMM in place, to best match the given observations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit returns a bool to indicate whether the EM algorithm converged,</span>
+<span class="c1"># and the log-likelihood after the adjustments are made.</span>
+<span class="n">new_hsmm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="o">-</span><span class="mf">352.16412850351435</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we examine the adjusted duration distribution, we see that this
+reproduces to some extent the original distribution, with very
+pronounced probabilities for duration 2 in state 0, duration 6 in state
+1, and duration 10 in state 2.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">new_hsmm</span><span class="o">.</span><span class="n">durations</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span>  <span class="mf">7.1e-35</span>   <span class="mf">5.4e-01</span>   <span class="mf">1.2e-31</span>   <span class="mf">1.5e-01</span>   <span class="mf">4.4e-39</span>   <span class="mf">2.1e-01</span>   <span class="mf">7.2e-08</span>
+    <span class="mf">1.0e-01</span>   <span class="mf">5.9e-08</span>   <span class="mf">5.9e-08</span><span class="p">]</span>
+ <span class="p">[</span>  <span class="mf">1.0e-01</span>   <span class="mf">5.5e-49</span>   <span class="mf">3.1e-49</span>   <span class="mf">3.2e-51</span>   <span class="mf">1.0e-01</span>   <span class="mf">5.0e-01</span>   <span class="mf">1.2e-18</span>
+    <span class="mf">1.0e-01</span>   <span class="mf">1.0e-01</span>   <span class="mf">1.0e-01</span><span class="p">]</span>
+ <span class="p">[</span>  <span class="mf">3.7e-44</span>   <span class="mf">9.0e-56</span>   <span class="mf">5.8e-41</span>   <span class="mf">2.5e-01</span>   <span class="mf">8.4e-02</span>   <span class="mf">8.3e-02</span>   <span class="mf">8.3e-02</span>
+    <span class="mf">3.8e-57</span>   <span class="mf">8.3e-02</span>   <span class="mf">4.2e-01</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>In tandem with the duration distributions, the other parameters have
+also changed. The transition matrix has become a little more pronounced
+to emphasize the transitions between different states, and the locations
+and scales of the emission PDFs have shifted a bit.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s1">&#39;New transition matrices:&#39;</span>
+<span class="nb">print</span> <span class="n">new_hsmm</span><span class="o">.</span><span class="n">tmat</span>
+<span class="nb">print</span> <span class="s1">&#39;New emission parameters:&#39;</span>
+<span class="nb">print</span> <span class="s1">&#39;Means:&#39;</span><span class="p">,</span> <span class="n">new_hsmm</span><span class="o">.</span><span class="n">means</span>
+<span class="nb">print</span> <span class="s1">&#39;Scales:&#39;</span><span class="p">,</span> <span class="n">new_hsmm</span><span class="o">.</span><span class="n">scales</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">New</span> <span class="n">transition</span> <span class="n">matrices</span><span class="p">:</span>
+<span class="p">[[</span> <span class="mf">0.</span>   <span class="mf">0.4</span>  <span class="mf">0.6</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.5</span>  <span class="mf">0.</span>   <span class="mf">0.5</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">0.6</span>  <span class="mf">0.4</span>  <span class="mf">0.</span> <span class="p">]]</span>
+<span class="n">New</span> <span class="n">emission</span> <span class="n">parameters</span><span class="p">:</span>
+<span class="n">Means</span><span class="p">:</span> <span class="p">[</span> <span class="o">-</span><span class="mf">0.2</span>   <span class="mf">5.1</span>  <span class="mf">10.1</span><span class="p">]</span>
+<span class="n">Scales</span><span class="p">:</span> <span class="p">[</span> <span class="mf">1.2</span>  <span class="mf">0.9</span>  <span class="mf">0.9</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reference.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to the documentation for hsmmlearn!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2016, Joris Vankerschaver
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
